@@ -1,0 +1,167 @@
+create database db9222
+use db9222
+select * from tblemployee
+select * from tblgender
+select * from tblgender
+select * from tbldesignation
+select * from tblqualification
+select * from tblcountry
+select * from tblstate
+
+create table tblgender
+(
+gid int primary key identity,
+gname varchar(45)
+)
+
+insert into tblgender(gname)values('male'),('female'),('other')
+
+create table tbldesignation
+(
+did int primary key identity,
+dname varchar(54)
+)
+
+insert into tbldesignation(dname)values('software engineer'),('hr'),('accountant'),('admin'),('software tester')
+
+
+create table tblqualification
+(
+qid int primary key identity,
+qname varchar(45)
+)
+
+insert into tblqualification(qname)values('mca'),('b.tech'),('m.tech')
+
+create table tblcountry
+(
+cid int primary key identity,
+caname varchar(54)
+)
+
+insert into tblcountry(caname)values('india'),('pakistan'),('usa')
+
+
+create table tblstate 
+(
+sid int primary key identity,
+cid int,
+sname varchar(46)
+)
+
+insert into tblstate(cid,sname)values(1,'up'),(1,'bihar'),(2,'sindh'),(2,'khayber'),(3,'newyork'),(3,'texas')
+
+create table tblemployee
+(
+id int primary key identity,
+name varchar(54),
+gender int,
+designation int,
+salary int,
+email varchar(54),
+mobile bigint,
+manager varchar(54),
+qualification int,
+country int,
+state int
+)
+
+
+
+create proc employee_insert
+@name varchar(54),
+@gender int,
+@designation int,
+@salary int,
+@email varchar(54),
+@mobile bigint,
+@manager varchar(54),
+@qualification int,
+@country int,
+@state int
+as
+begin
+insert into tblemployee(name,gender,designation,salary,email,mobile,manager,qualification,country,state)
+values(@name,@gender,@designation,@salary,@email,@mobile,@manager,@qualification,@country,@state)
+end
+
+create proc employeejoin
+as
+begin
+select * from tblemployee 
+join tblgender on tblemployee.gender=tblgender.gid
+join tbldesignation on tblemployee.designation=tbldesignation.did
+join tblqualification on tblemployee.qualification=tblqualification.qid
+join tblcountry on tblemployee.country=tblcountry.cid
+join tblstate on tblemployee.state=tblstate.sid
+end
+
+
+
+create proc  usp_tblemployee_update
+@id int,
+@name varchar(54),
+@gender int,
+@designation int,
+@salary int,
+@email varchar(54),
+@mobile bigint,
+@manager varchar(54),
+@qualification int,
+@country int,
+@state int
+as
+begin
+update Student set name=@name,gender=@gender,designation=@designation,salary=@salary, email=@email,mobile=@mobile,manager=@manager,
+qualification=@qualification,country=@country,state=@state where id=@id
+end
+
+create proc usp_employee_edit
+@id int
+as
+begin
+select * from employee where id=@id 
+end
+
+
+
+create proc employee_delete
+@id int
+as
+begin
+delete from tblemployee where id=@id
+end
+
+create proc gender_get
+as
+begin
+select * from tblgender
+end
+
+
+create proc designation_get
+as
+begin
+select * from tbldesignation
+end
+
+
+create proc qualification_get
+as
+begin
+select * from tblqualification
+end
+
+create proc country_get
+as
+begin
+select * from tblcountry
+end
+
+
+create proc state_grt
+@country int
+as
+begin
+select * from tblstate where cid=@country
+end
